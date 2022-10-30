@@ -9,8 +9,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
-//@CrossOrigin(origins="*")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins="*")
+//@CrossOrigin()
 @RestController
 @RequestMapping(value = "")
 public class Controller {
@@ -48,8 +48,8 @@ public class Controller {
         return allB;
     }
 
-    @PostMapping()
-    @RequestMapping("/postA")
+    @GetMapping
+    @RequestMapping("/encodedA")
     public Set<String> getA(){
 
         HashMap<String, TableA> encodedA = new HashMap();
@@ -81,8 +81,8 @@ public class Controller {
         return encodedA.keySet();
     }
 
-    @PostMapping()
-    @RequestMapping("/postB")
+    @GetMapping
+    @RequestMapping("/encodedB")
     public Set<String> getB(){
 
 //        HashMap<String, TableA> encodedA = new HashMap();
@@ -141,7 +141,8 @@ public class Controller {
         return encodedB.keySet();
     }
 
-    @PostMapping
+    @GetMapping
+    @RequestMapping("/update")
     public List<Object> getNewB(){
         /*
         * allA

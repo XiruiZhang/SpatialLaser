@@ -14,10 +14,11 @@ const URL = 'http://localhost:8080';
 const AfterComponent = () => {
 
     const[data, setData] = useState([]);
-    let show = false;
+    const[show, setShow] = useState(false);
+    //let show = false;
 
     const fetchData = () => {
-        axios.get(URL+'/post').then(
+        axios.get(URL+'/update').then(
             (res) => {
                 console.log(res.data);
                 setData(res.data);
@@ -30,14 +31,14 @@ const AfterComponent = () => {
     }
 
     function showTable() {
-        show = true;
+        setShow(true);
         fetchData();
     }
 
     return(
         <div className="after">
             <div>
-                <Button variant="contained" onClick={() => showTable()}>Update</Button>
+                <Button variant="contained" onClick={() => showTable()} style={{marginTop:"20px", marginBottom: "20px"}}>Update</Button>
                 {show &&
                     <div>
                         <TableContainer component={Paper}>

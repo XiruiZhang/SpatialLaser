@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
 import BeforeComponent from "./components/BeforeComponent";
 import AfterComponent from "./components/AfterComponent";
