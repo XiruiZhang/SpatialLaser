@@ -9,7 +9,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from "@mui/material/Paper";
 import Button from '@mui/material/Button';
 
-const URL = 'http://spatiallasertestbakend-env.eba-z7sbvmpt.ca-central-1.elasticbeanstalk.com/getA';
+//const URL = 'http://spatiallasertestbakend-env.eba-z7sbvmpt.ca-central-1.elasticbeanstalk.com/getA';
+const URL = 'https://cors-everywhere.herokuapp.com/http://spatiallasertestbakend-env.eba-z7sbvmpt.ca-central-1.elasticbeanstalk.com';
 
 const AfterComponent = () => {
 

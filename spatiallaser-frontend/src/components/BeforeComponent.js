@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-const URL = 'http://spatiallasertestbakend-env.eba-z7sbvmpt.ca-central-1.elasticbeanstalk.com';
+const URL = 'https://cors-everywhere.herokuapp.com/http://spatiallasertestbakend-env.eba-z7sbvmpt.ca-central-1.elasticbeanstalk.com';
 
 const BeforeComponent = () => {
 
@@ -20,6 +20,7 @@ const BeforeComponent = () => {
     }, []);
     
     const fetchData = () => {
+
         axios.get(URL+'/getA').then(
             (res) =>{
                 console.log(res.data);
