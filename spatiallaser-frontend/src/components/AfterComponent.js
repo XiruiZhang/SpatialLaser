@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from "@mui/material/Paper";
 import Button from '@mui/material/Button';
 
-const URL = 'http://localhost:8080';
+const URL = 'http://spatiallasertestbakend-env.eba-z7sbvmpt.ca-central-1.elasticbeanstalk.com/getA';
 
 const AfterComponent = () => {
 
