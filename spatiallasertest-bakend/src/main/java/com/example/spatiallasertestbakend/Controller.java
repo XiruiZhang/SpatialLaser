@@ -160,8 +160,8 @@ public class Controller {
          * string of response.body and parse, compare the street_address and city
          * */
 
-//        allA = tableAService.getAllAddresses();
-//        allB = tableBService.getAllAddresses();
+        allA = tableAService.getAllAddresses();
+        allB = tableBService.getAllAddresses();
 
         HashMap<String, TableA> encodedA = new HashMap();
         HashMap<String, TableB> encodedB = new HashMap();
@@ -221,9 +221,9 @@ public class Controller {
             }
         }
 
-        for(TableA ta : encodedA.values()){
-            result.add(ta);
-        }
+//        for(TableA ta : encodedA.values()){
+//            result.add(ta);
+//        }
 
 //        for(TableB tb: encodedB.values()){
 //            result.add(tb);
