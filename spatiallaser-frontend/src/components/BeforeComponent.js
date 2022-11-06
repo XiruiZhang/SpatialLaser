@@ -10,9 +10,9 @@ import Paper from '@mui/material/Paper';
 
 const URL = 'https://cors-everywhere.herokuapp.com/http://spatiallasertestbakend-env.eba-z7sbvmpt.ca-central-1.elasticbeanstalk.com';
 
-const BeforeComponent = () => {
+const BeforeComponent = ({tableA}) => {
 
-    const[tableA, setTableA] = useState([]);
+    //const[tableA, setTableA] = useState([]);
     const[tableB, setTableB] = useState([]);
 
     useEffect(() => {
@@ -21,16 +21,6 @@ const BeforeComponent = () => {
     
     const fetchData = () => {
 
-        axios.get(URL+'/getA').then(
-            (res) =>{
-                console.log(res.data);
-                setTableA(res.data);
-            }
-        ).catch(
-            (err) =>{
-                console.log(err);
-            }
-        )
         axios.get(URL+'/getB').then(
             (res) => {
                 console.log(res.data);
@@ -44,7 +34,6 @@ const BeforeComponent = () => {
     }
 
     return(
-        <div>
             <div className="before">
                 <TableContainer component={Paper}>
                     <Table>
@@ -67,7 +56,8 @@ const BeforeComponent = () => {
                             )}
                         </TableBody>
                     </Table>
-
+                </TableContainer>
+                <TableContainer>
                     <Table>
                         <TableHead>
                             <TableRow>
@@ -88,12 +78,9 @@ const BeforeComponent = () => {
                             )}
                         </TableBody>
                     </Table>
-
                 </TableContainer>
             </div>
-            <div className="after"></div>
 
-        </div>
     )
 }
 

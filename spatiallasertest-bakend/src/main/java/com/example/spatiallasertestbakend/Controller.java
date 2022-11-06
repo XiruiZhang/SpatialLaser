@@ -28,12 +28,19 @@ public class Controller {
 
     private List<TableB> newB = new ArrayList<>();
 
+    //two hashset of invalid addresses to keep track of invalid addresses in table A and table B
+    private HashSet<TableA> invalid = new HashSet<>();
+    private HashSet<TableA> invalidA = new HashSet<>();
+
     public Controller(TableAService tableAService, TableBService tableBService, RestTemplate restTemplate){
         this.tableAService = tableAService;
         this.tableBService = tableBService;
         this.restTemplate = restTemplate;
     }
 
+    /*
+    * return a list of table A addresses
+    * */
     @GetMapping
     @RequestMapping("/getA")
     public List<TableA> getAllA(){
@@ -41,6 +48,9 @@ public class Controller {
         return allA;
     }
 
+    /*
+    * return a list of table B addresses
+    * */
     @GetMapping
     @RequestMapping("/getB")
     public List<TableB> getAllB(){
@@ -48,10 +58,14 @@ public class Controller {
         return allB;
     }
 
+    /*
+    * return a set of string of place key of addresses in table A
+    * */
     @GetMapping
     @RequestMapping("/encodedA")
     public Set<String> getA(){
 
+        //key is the placekey, value is the address object
         HashMap<String, TableA> encodedA = new HashMap();
 
         HttpHeaders headers = new HttpHeaders();
@@ -59,90 +73,120 @@ public class Controller {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         for (TableA ta: allA) {
-
-            HashMap<String, HashMap<String, String>> request = new HashMap<>();
-            HashMap<String, String> map = new HashMap<>();
-
-            map.put("street_address", ta.address);
-            map.put("city", ta.city);
-            map.put("region", ta.state);
-            map.put("postal_code", null);
-            map.put("iso_country_code", "US");
-
-            request.put("query", map);
-
-            //RestTemplate restTemplate = new RestTemplate();
-
-            //HttpEntity<MultiValueMap<String, MultiValueMap<String,String>>> entity = new HttpEntity<MultiValueMap<String, MultiValueMap<String, String>>>(request, headers);
-            HttpEntity<HashMap<String, HashMap<String, String>>> entity = new HttpEntity<>(request, headers);
-            ResponseEntity<String> response = restTemplate.postForEntity(URL, entity, String.class);
-            encodedA.put(response.getBody(), ta);
+            getEncodedA(ta, encodedA, headers);
         }
+
         return encodedA.keySet();
     }
 
+    /*
+    * implementation of get place key
+    * */
+    public void getEncodedA(TableA ta, HashMap<String, TableA> encodedA, HttpHeaders headers){
+        HashMap<String, HashMap<String, String>> request = new HashMap<>();
+        HashMap<String, String> map = new HashMap<>();
+
+        map.put("street_address", ta.address);
+        map.put("city", ta.city);
+        map.put("region", ta.state);
+        map.put("postal_code", null);
+        map.put("iso_country_code", "US");
+
+        request.put("query", map);
+
+        HttpEntity<HashMap<String, HashMap<String, String>>> entity = new HttpEntity<>(request, headers);
+        ResponseEntity<Response> response = restTemplate.postForEntity(URL, entity, Response.class);
+
+        /*
+        * if addresses == null => invalid address
+        * add to both invalid and invalidA
+        * */
+        if(response.getBody().getPlacekey() == null){
+            invalid.add(ta);
+            invalidA.add(ta);
+        }else{
+            encodedA.put(response.getBody().getPlacekey(), ta);
+        }
+    }
+
+    /*
+     * return a set of string of place key of addresses in table B
+     * */
     @GetMapping
     @RequestMapping("/encodedB")
     public Set<String> getB(){
 
-//        HashMap<String, TableA> encodedA = new HashMap();
         HashMap<String, TableB> encodedB = new HashMap();
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.set("apikey", "wlgL94i2TITm4DX91G5HLHYbGbMrXmm2");
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//
-//        for (TableA ta: allA) {
-//
-//            HashMap<String, HashMap<String, String>> request = new HashMap<>();
-//            HashMap<String, String> map = new HashMap<>();
-//
-//            map.put("street_address", ta.address);
-//            map.put("city", ta.city);
-//            map.put("region", ta.state);
-//            map.put("postal_code", null);
-//            map.put("iso_country_code", "US");
-//
-//            request.put("query", map);
-//
-//            //RestTemplate restTemplate = new RestTemplate();
-//
-//            //HttpEntity<MultiValueMap<String, MultiValueMap<String,String>>> entity = new HttpEntity<MultiValueMap<String, MultiValueMap<String, String>>>(request, headers);
-//            HttpEntity<HashMap<String, HashMap<String, String>>> entity = new HttpEntity<>(request, headers);
-//            ResponseEntity<String> response = restTemplate.postForEntity(URL, entity, String.class);
-//            encodedA.put(String.valueOf(response), ta);
-//        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("apikey", "wlgL94i2TITm4DX91G5HLHYbGbMrXmm2");
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         for(TableB tb: allB){
-
-            HashMap<String, HashMap<String, String>> request = new HashMap<>();
-            HashMap<String, String> map = new HashMap<>();
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("apikey", "wlgL94i2TITm4DX91G5HLHYbGbMrXmm2");
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
-            map.put("street_address", tb.address);
-            map.put("city", tb.city);
-            map.put("region", tb.state);
-            map.put("postal_code", null);
-            map.put("iso_country_code", "US");
-
-            request.put("query", map);
-
-            //RestTemplate restTemplate = new RestTemplate();
-
-            //HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-            //HttpEntity<MultiValueMap<String, MultiValueMap<String,String>>> entity = new HttpEntity<MultiValueMap<String, MultiValueMap<String, String>>>(request, headers);
-            HttpEntity<HashMap<String, HashMap<String, String>>> entity = new HttpEntity<>(request, headers);
-            ResponseEntity<String> response = restTemplate.postForEntity(URL, entity, String.class);
-            encodedB.put(response.getBody(), tb);
+            getEncodedB(tb, encodedB, headers);
         }
+
         return encodedB.keySet();
     }
 
+    /*
+     * implementation of get place key
+     * */
+    public void getEncodedB(TableB tb, HashMap<String, TableB> encodedB, HttpHeaders headers){
+        HashMap<String, HashMap<String, String>> request = new HashMap<>();
+        HashMap<String, String> map = new HashMap<>();
+
+
+        map.put("street_address", tb.address);
+        map.put("city", tb.city);
+        map.put("region", tb.state);
+        map.put("postal_code", null);
+        map.put("iso_country_code", "US");
+
+        request.put("query", map);
+
+        HttpEntity<HashMap<String, HashMap<String, String>>> entity = new HttpEntity<>(request, headers);
+
+        ResponseEntity<Response> response = restTemplate.postForEntity(URL, entity, Response.class);
+
+        /*
+         * if placekey is null => invalid address
+         * add to invalid, duplicate value removed "automatically" with overriden hashCode and equals
+         * otherwise add to the encoded hashmap
+         * */
+        if(response.getBody().getPlacekey() == null){
+            TableA tempTA = new TableA();
+            tempTA.address = tb.address;
+            tempTA.city = tb.city;
+            tempTA.state = tb.state;
+            invalid.add(tempTA);
+        }else{
+            encodedB.put(response.getBody().getPlacekey(), tb);
+        }
+    }
+
+    /*
+    * for testing purpose
+    * get all the invalid addresses
+    * */
     @GetMapping
-    @RequestMapping("/update")
+    @RequestMapping("/getInvalid")
+    public HashSet<TableA> getInvalid(){
+        return invalid;
+    }
+    /*
+    * for testing purpose
+    * get invalid addresses in table A
+    * */
+    @GetMapping
+    @RequestMapping("/getInvalidA")
+    public HashSet<TableA> getInvalidA(){
+        return invalidA;
+    }
+
+
+    @GetMapping
+    @RequestMapping("/getNewB")
     public List<Object> getNewB(){
         /*
          * allA
@@ -151,13 +195,6 @@ public class Controller {
          * use their address city state to get the encoded
          * save encoded in encodedA encodedB
          * if encodedA not contain encodedB, add to newB
-         * */
-
-        /*
-         * when more than 1 invalid addresses key
-         * how to compare if same address
-         * if invalid address then no need to compare ifcontains
-         * string of response.body and parse, compare the street_address and city
          * */
 
         allA = tableAService.getAllAddresses();
@@ -172,66 +209,29 @@ public class Controller {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         for (TableA ta: allA) {
-
-            HashMap<String, HashMap<String, String>> request = new HashMap<>();
-            HashMap<String, String> map = new HashMap<>();
-
-            map.put("street_address", ta.address);
-            map.put("city", ta.city);
-            map.put("region", ta.state);
-            map.put("postal_code", null);
-            map.put("iso_country_code", "US");
-
-            request.put("query", map);
-
-
-            //RestTemplate restTemplate = new RestTemplate();
-
-            //HttpEntity<MultiValueMap<String, MultiValueMap<String,String>>> entity = new HttpEntity<MultiValueMap<String, MultiValueMap<String, String>>>(request, headers);
-            HttpEntity<HashMap<String, HashMap<String, String>>> entity = new HttpEntity<>(request, headers);
-            ResponseEntity<String> response = restTemplate.postForEntity(URL, entity, String.class);
-            encodedA.put(response.getBody(), ta);
+            getEncodedA(ta, encodedA, headers);
         }
 
         for(TableB tb: allB){
-
-            HashMap<String, HashMap<String, String>> request = new HashMap<>();
-            HashMap<String, String> map = new HashMap<>();
-
-            map.put("street_address", tb.address);
-            map.put("city", tb.city);
-            map.put("region", tb.state);
-            map.put("postal_code", null);
-            map.put("iso_country_code", "US");
-
-            request.put("query", map);
-
-            //RestTemplate restTemplate = new RestTemplate();
-
-            //HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-            //HttpEntity<MultiValueMap<String, MultiValueMap<String,String>>> entity = new HttpEntity<MultiValueMap<String, MultiValueMap<String, String>>>(request, headers);
-            HttpEntity<HashMap<String, HashMap<String, String>>> entity = new HttpEntity<>(request, headers);
-            ResponseEntity<String> response = restTemplate.postForEntity(URL, entity, String.class);
-            encodedB.put(response.getBody(), tb);
+            getEncodedB(tb, encodedB, headers);
         }
 
         for(String sb: encodedB.keySet()){
+            //remove duplicate placekey
             if(!encodedA.keySet().contains(sb)){
                 result.add(encodedB.get(sb));
             }
         }
 
-//        for(TableA ta : encodedA.values()){
-//            result.add(ta);
-//        }
-
-//        for(TableB tb: encodedB.values()){
-//            result.add(tb);
-//        }
+        //add invalid address if it was in table B
+        for(TableA o : invalidA){
+            if(!invalid.contains(o)){
+                result.add(o);
+            }
+        }
 
         return result;
     }
-
 
 }
 

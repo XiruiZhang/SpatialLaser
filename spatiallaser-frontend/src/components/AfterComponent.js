@@ -9,33 +9,18 @@ import TableRow from '@mui/material/TableRow';
 import Paper from "@mui/material/Paper";
 import Button from '@mui/material/Button';
 
-//const URL = 'http://spatiallasertestbakend-env.eba-z7sbvmpt.ca-central-1.elasticbeanstalk.com/getA';
-
 const URL = 'https://cors-everywhere.herokuapp.com/http://spatiallasertestbakend-env.eba-z7sbvmpt.ca-central-1.elasticbeanstalk.com';
 //const URL = 'http://localhost:5000';
 
-const AfterComponent = () => {
+const AfterComponent = ({tableA}) => {
 
-    const[tableA, setTableA] = useState([]);
+    //const[tableA, setTableA] = useState([]);
     const[data, setData] = useState([]);
     const[show, setShow] = useState(false);
 
-    //let show = false;
-
     const fetchData = () => {
 
-        axios.get(URL+'/getA').then(
-            (res) =>{
-                console.log(res.data);
-                setTableA(res.data);
-            }
-        ).catch(
-            (err) =>{
-                console.log(err);
-            }
-        )
-
-        axios.get(URL+'/update').then(
+        axios.get(URL+'/getNewB').then(
             (res) => {
                 console.log(res.data);
                 setData(res.data);
@@ -70,7 +55,7 @@ const AfterComponent = () => {
                                 <TableBody>
                                     {tableA.map(
                                         (row) => (
-                                            <TableRow key={row.address} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                            <TableRow key={row.address} >
                                                 <TableCell>{row.address}</TableCell>
                                                 <TableCell>{row.city}</TableCell>
                                                 <TableCell>{row.state}</TableCell>
@@ -79,7 +64,8 @@ const AfterComponent = () => {
                                     )}
                                 </TableBody>
                             </Table>
-
+                        </TableContainer>
+                        <TableContainer>
                             <Table>
                                 <TableHead>
                                     <TableRow>
@@ -88,10 +74,11 @@ const AfterComponent = () => {
                                         <TableCell align={"right"}>State</TableCell>
                                     </TableRow>
                                 </TableHead>
+
                                 <TableBody>
                                     {data.map(
                                         (row) => (
-                                            <TableRow key={row.address} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                            <TableRow key={row.address}>
                                                 <TableCell>{row.address}</TableCell>
                                                 <TableCell>{row.city}</TableCell>
                                                 <TableCell>{row.state}</TableCell>
