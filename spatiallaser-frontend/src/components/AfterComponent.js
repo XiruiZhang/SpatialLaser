@@ -14,16 +14,14 @@ const URL = 'https://cors-everywhere.herokuapp.com/http://spatiallasertestbakend
 
 const AfterComponent = ({tableA}) => {
 
-    //const[tableA, setTableA] = useState([]);
-    const[data, setData] = useState([]);
+    const[tableB, setTableB] = useState([]);
     const[show, setShow] = useState(false);
 
     const fetchData = () => {
 
         axios.get(URL+'/getNewB').then(
             (res) => {
-                console.log(res.data);
-                setData(res.data);
+                setTableB(res.data);
             }
         ).catch(
             (err) => {
@@ -41,42 +39,21 @@ const AfterComponent = ({tableA}) => {
         <div className="after">
             <div>
                 <Button variant="contained" onClick={() => showTable()} style={{marginTop:"20px", marginBottom: "20px"}}>Update</Button>
-                {show &&
+            </div>
+            {show &&
+                <div>
                     <div>
                         <TableContainer component={Paper}>
                             <Table>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>Street Address</TableCell>
-                                        <TableCell align={"right"}>City</TableCell>
-                                        <TableCell align={"right"}>State</TableCell>
+                                        <TableCell>City</TableCell>
+                                        <TableCell>State</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {tableA.map(
-                                        (row) => (
-                                            <TableRow key={row.address} >
-                                                <TableCell>{row.address}</TableCell>
-                                                <TableCell>{row.city}</TableCell>
-                                                <TableCell>{row.state}</TableCell>
-                                            </TableRow>
-                                        )
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        <TableContainer>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Street Address</TableCell>
-                                        <TableCell align={"right"}>City</TableCell>
-                                        <TableCell align={"right"}>State</TableCell>
-                                    </TableRow>
-                                </TableHead>
-
-                                <TableBody>
-                                    {data.map(
                                         (row) => (
                                             <TableRow key={row.address}>
                                                 <TableCell>{row.address}</TableCell>
@@ -88,9 +65,32 @@ const AfterComponent = ({tableA}) => {
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                    </div>}
-
-            </div>
+                    </div>
+                    <div>
+                        <TableContainer component={Paper}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Street Address</TableCell>
+                                        <TableCell>City</TableCell>
+                                        <TableCell>State</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {tableB.map(
+                                        (row) => (
+                                            <TableRow key={row.address}>
+                                                <TableCell>{row.address}</TableCell>
+                                                <TableCell>{row.city}</TableCell>
+                                                <TableCell>{row.state}</TableCell>
+                                            </TableRow>
+                                        )
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </div>
+                </div>}
         </div>
     )
 }

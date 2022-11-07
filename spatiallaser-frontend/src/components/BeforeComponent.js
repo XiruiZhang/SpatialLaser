@@ -12,7 +12,6 @@ const URL = 'https://cors-everywhere.herokuapp.com/http://spatiallasertestbakend
 
 const BeforeComponent = ({tableA}) => {
 
-    //const[tableA, setTableA] = useState([]);
     const[tableB, setTableB] = useState([]);
 
     useEffect(() => {
@@ -23,7 +22,6 @@ const BeforeComponent = ({tableA}) => {
 
         axios.get(URL+'/getB').then(
             (res) => {
-                console.log(res.data);
                 setTableB(res.data);
             }
         ).catch(
@@ -34,51 +32,57 @@ const BeforeComponent = ({tableA}) => {
     }
 
     return(
-            <div className="before">
-                <TableContainer component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Street Address</TableCell>
-                                <TableCell align={"right"}>City</TableCell>
-                                <TableCell align={"right"}>State</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {tableA.map(
-                                (row) => (
-                                    <TableRow key={row.address} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                        <TableCell>{row.address}</TableCell>
-                                        <TableCell>{row.city}</TableCell>
-                                        <TableCell>{row.state}</TableCell>
-                                    </TableRow>
-                                )
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TableContainer>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Street Address</TableCell>
-                                <TableCell align={"right"}>City</TableCell>
-                                <TableCell align={"right"}>State</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {tableB.map(
-                                (row) => (
-                                    <TableRow key={row.address} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                        <TableCell>{row.address}</TableCell>
-                                        <TableCell>{row.city}</TableCell>
-                                        <TableCell>{row.state}</TableCell>
-                                    </TableRow>
-                                )
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+            <div className="before" >
+                <div>
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Street Address</TableCell>
+                                    <TableCell>City</TableCell>
+                                    <TableCell>State</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {tableA.map(
+                                    (row) => (
+                                        <TableRow key={row.address}>
+                                            <TableCell>{row.address}</TableCell>
+                                            <TableCell>{row.city}</TableCell>
+                                            <TableCell>{row.state}</TableCell>
+                                        </TableRow>
+                                    )
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </div>
+
+                <div>
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Street Address</TableCell>
+                                    <TableCell>City</TableCell>
+                                    <TableCell>State</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {tableB.map(
+                                    (row) => (
+                                        <TableRow key={row.address}>
+                                            <TableCell>{row.address}</TableCell>
+                                            <TableCell>{row.city}</TableCell>
+                                            <TableCell>{row.state}</TableCell>
+                                        </TableRow>
+                                    )
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </div>
+
             </div>
 
     )
