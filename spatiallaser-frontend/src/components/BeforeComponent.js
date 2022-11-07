@@ -34,6 +34,7 @@ const BeforeComponent = ({tableA}) => {
     return(
             <div className="before" >
                 <div>
+                    <h1>Table A</h1>
                     <TableContainer component={Paper}>
                         <Table>
                             <TableHead>
@@ -59,6 +60,7 @@ const BeforeComponent = ({tableA}) => {
                 </div>
 
                 <div>
+                    <h1>Table B</h1>
                     <TableContainer component={Paper}>
                         <Table>
                             <TableHead>

@@ -43,6 +43,7 @@ const AfterComponent = ({tableA}) => {
             {show &&
                 <div>
                     <div>
+                        <h1>Table A</h1>
                         <TableContainer component={Paper}>
                             <Table>
                                 <TableHead>
@@ -67,6 +68,7 @@ const AfterComponent = ({tableA}) => {
                         </TableContainer>
                     </div>
                     <div>
+                        <h1>Table B</h1>
                         <TableContainer component={Paper}>
                             <Table>
                                 <TableHead>
